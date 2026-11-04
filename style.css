@@ -3,11 +3,11 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f6f8;
+  background: #f54fcb;
   color: #222;
 }
 
-header { background: #1e293b; color: #fff; padding: 16px 24px; }
+header { background: #0060fc; color: #fff; padding: 16px 24px; }
 
 main { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
 
@@ -38,3 +38,5 @@ main { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
 }
 
 .card button:hover { background: #1d4ed8; }
+
+header { display: flex; justify-content: space-between; align-items: center; }
