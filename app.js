@@ -1,20 +1,9 @@
-const products = [
-  { id: 1, title: 'Ноутбук 15"',       category: 'Компьютеры', price: 85000 },
-  { id: 2, title: 'Монитор 27"',       category: 'Компьютеры', price: 28000 },
-  { id: 3, title: 'Клавиатура',        category: 'Аксессуары', price: 6500 },
-  { id: 4, title: 'Мышь беспроводная', category: 'Аксессуары', price: 2500 },
-  { id: 5, title: 'Блок питания 600W',       category: 'Компьютеры', price: 3700 },
-  { id: 6, title: 'Корпус пк',       category: 'Компьютеры', price: 2900 },
-  { id: 7, title: 'ИБП',       category: 'Сетевое оборудование', price: 9500 },
-  { id: 8, title: 'Наушники игровые', category: 'Аксессуары', price: 4200 },
-  { id: 9, title: 'Веб-камера Full HD', category: 'Аксессуары', price: 5800 }
-];
-let cart = [];
+let products = [];
+const cart = [];
 
 const catalog = document.getElementById('catalog');
 const cartCount = document.getElementById('cart-count');
 const cartSum = document.getElementById('cart-sum');
-const clearCartBtn = document.getElementById('clear-cart');
 
 function renderProducts() {
   catalog.innerHTML = products.map(p => `
@@ -34,6 +23,13 @@ function renderCart() {
     .toLocaleString('ru-RU');
 }
 
+const clearCart = document.getElementById('clear-cart');
+
+clearCart.addEventListener('click', () => {
+    cart.length = 0;
+    renderCart();
+});
+
 catalog.addEventListener('click', e => {
   if (e.target.tagName !== 'BUTTON') return;
   const product = products.find(p => p.id === Number(e.target.dataset.id));
@@ -41,9 +37,16 @@ catalog.addEventListener('click', e => {
   renderCart();
 });
 
-clearCartBtn.addEventListener('click', () => {
-    cart = [];
-    renderCart();
-});
+async function loadProducts() {
+  try {
+    const response = await fetch('http://localhost:3000/api/products');
+    if (!response.ok) throw new Error('Ошибка сервера: ' + response.status);
+    products = await response.json();
+    renderProducts();
+  } catch (err) {
+    catalog.innerHTML = '<p>Не удалось загрузить товары. Запущен ли сервер?</p>';
+    console.error(err);
+  }
+}
 
-renderProducts();
+loadProducts();
